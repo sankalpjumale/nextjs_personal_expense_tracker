@@ -33,3 +33,30 @@ export async function createExpense(formData: FormData) {
     revalidatePath('/dashboard')
     redirect('/dashboard')
 }
+
+export async function updateExpense(id: string, formData: FormData) {
+    const {userId} = await auth()
+    if(!userId) throw new Error('Unauthorized')
+
+    const amount = parseFloat(formData.get('amount') as string)
+    const category = formData.get('category') as string
+    const description = formData.get('description') as string
+    const date = formData.get('date') as string
+
+    //fetch expense by id, then verifies(the authenticated user)
+    const expense = await prisma.expense.findUnique({where: { id }})
+    if(!expense || expense.userId !== userId) throw new Error('Not found')
+
+    await prisma.expense.update({
+        where: ({id}),
+        data: {
+            amount,
+            category,
+            description,
+            date: new Date(date)
+        }
+    })
+
+    revalidatePath('/dashboard')
+    redirect('/dashboard')
+}
