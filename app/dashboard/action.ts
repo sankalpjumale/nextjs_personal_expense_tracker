@@ -60,3 +60,15 @@ export async function updateExpense(id: string, formData: FormData) {
     revalidatePath('/dashboard')
     redirect('/dashboard')
 }
+
+export async function deleteExpense(id: string) {
+    const {userId} = await auth()
+    if(!userId) throw new Error('Unauthorized')
+
+    const expense = await prisma.expense.findUnique({where: {id}})
+    if(!expense || expense.userId !== userId) throw new Error('Not found')
+
+    await prisma.expense.delete({where: {id}})
+
+    revalidatePath('/dashboard')
+}
