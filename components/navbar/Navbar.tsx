@@ -1,5 +1,6 @@
-import { UserButton } from '@clerk/nextjs'
+import { SignOutButton, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import { Button } from '../ui/button'
 
 function Navbar() {
   return (
@@ -7,6 +8,11 @@ function Navbar() {
       <Link href="/dashboard" className='font-semibold text-lg'>
         Expense Tracker
       </Link>
+      <div>
+        <SignOutButton redirectUrl="/">
+          <Button variant="outline" size="sm">Logout</Button>
+        </SignOutButton>
+      </div>
       {/* <UserButton afterSignOutUrl="/" /> */}
     </nav>
   )

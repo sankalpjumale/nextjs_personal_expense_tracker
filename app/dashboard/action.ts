@@ -14,7 +14,7 @@ export async function createExpense(formData: FormData) {
     const description = formData.get('description') as string
     const date = formData.get('date') as string
 
-    if (!amount || !category || !description || !date) {
+    if (!amount || !category || !date) {
         throw new Error('Missing required fields')
     }
 
