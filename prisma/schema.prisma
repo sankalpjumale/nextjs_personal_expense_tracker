@@ -35,7 +35,7 @@ model Expense {
   userId  String  //Clerk user ID
   amount  Decimal @db.Decimal(10, 2)
   categoryId  String
-  category  Category @relation(field: [categoryId], references: [id])
+  category  Category @relation(fields: [categoryId], references: [id])
   description String?
   date  DateTime
   createdAt DateTime @default(now())
