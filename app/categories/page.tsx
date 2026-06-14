@@ -2,8 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { createCategory, seedDefaultCategories } from "./action";
 import { prisma } from "@/lib/generated/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CategoryList } from "@/components/category-list/CategoryList";
-import { CategoryForm } from "@/components/category-form/CategoryForm";
+import  CategoryForm  from "@/components/category-form/CategoryForm";
+import CategoryList from "@/components/category-list/CategoryList";
 
 
 export default async function Categoriespage() {
@@ -36,7 +36,8 @@ export default async function Categoriespage() {
                 </CardHeader>
 
                 <CardContent>
-                    <CategoryForm categories={categories}/>
+                    <CategoryForm action={createCategory} />
+                    <CategoryList categories={categories} />
                 </CardContent>
             </Card>
 
