@@ -13,7 +13,6 @@ function Navbar() {
           <Button variant="outline" size="sm">Logout</Button>
         </SignOutButton>
       </div>
-      {/* <UserButton afterSignOutUrl="/" /> */}
     </nav>
   )
 }

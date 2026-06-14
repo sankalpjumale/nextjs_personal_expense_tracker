@@ -2,7 +2,6 @@ import ExpenseList from "@/components/expense-list/ExpenseList"
 import TotalSummaryCard from "@/components/total-summary-card/TotalSummaryCard"
 import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/generated/prisma"
-import { Expense } from "@/types/expense"
 import { auth } from "@clerk/nextjs/server"
 import Link from "next/link"
 
@@ -21,10 +20,10 @@ export default async function DashboardPage() {
     })
 
     const monthlyTotal = expenses
-        .filter((e: Expense) => e.date >= startOfMonth && e.date <=endOfMonth)
-        .reduce((sum: number, e: Expense) => sum + Number(e.amount), 0)
+        .filter((e) => e.date >= startOfMonth && e.date <=endOfMonth)
+        .reduce((sum: number, e) => sum + Number(e.amount), 0)
 
-    const formattedExpenses = expenses.map((e: Expense) => ({
+    const formattedExpenses = expenses.map((e) => ({
         ...e,
         amount: Number(e.amount),
     }))

@@ -15,12 +15,27 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model Category {
+  id  String  @id @default(cuid())
+  userId  String
+  name  String
+  icon  String  @default("Tag") //lucid-react
+  color String  @default("#6366f1") //hex color
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  expenses  Expense[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
 
 model Expense {
   id  String  @id @default(cuid())
   userId  String  //Clerk user ID
   amount  Decimal @db.Decimal(10, 2)
-  category  String
+  categoryId  String
+  category  Category @relation(field: [categoryId], references: [id])
   description String?
   date  DateTime
   createdAt DateTime @default(now())
@@ -28,4 +43,5 @@ model Expense {
 
   @@index([userId])
   @@index([userId, date])
+  @@index([categoryId])
 }
