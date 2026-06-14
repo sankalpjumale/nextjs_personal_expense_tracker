@@ -26,5 +26,27 @@ export async function createCategory(formData: FormData) {
     })
 
     revalidatePath('/categories')
-    redirect('categories')
+    redirect('/categories')
+}
+
+export async function updateCategory(id: string, formData: FormData) {
+    const {userId} = await auth()
+    if(!userId) throw new Error('Unauthorized')
+
+    const category = await prisma.category.findUnique({where: {id}})
+    if(!category || category.userId !== userId) {
+        throw new Error('Not found')
+    }
+
+    const name = formData.get("name") as string
+    const icon = formData.get("icon") as string
+    const color = formData.get("color") as string
+
+    await prisma.category.update({
+        where: {id},
+        data: {name: name.trim(), icon, color}
+    })
+
+    revalidatePath('/categories')
+    redirect('/categories')
 }
