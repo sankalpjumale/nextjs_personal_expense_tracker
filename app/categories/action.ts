@@ -50,3 +50,24 @@ export async function updateCategory(id: string, formData: FormData) {
     revalidatePath('/categories')
     redirect('/categories')
 }
+
+export async function deleteCategory(id: string) {
+    const {userId} = await auth()
+    if(!userId) throw new Error('Unauthorized')
+
+    const category = await prisma.category.findUnique({
+        where: {id},
+        include: {_count: {select: {expenses: true}}}
+    })
+
+    if(!category || category.userId !== userId) {
+        throw new Error('Not found')
+    }
+
+    if(category._count.expenses > 0) {
+        throw new Error("Cannot delete category with existing expenses. Reassign or delete those expenses first.")
+    }
+
+    await prisma.category.delete({where: {id}})
+    revalidatePath('/categories')
+}
