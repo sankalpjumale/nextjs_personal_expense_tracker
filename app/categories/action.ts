@@ -71,3 +71,22 @@ export async function deleteCategory(id: string) {
     await prisma.category.delete({where: {id}})
     revalidatePath('/categories')
 }
+
+export async function seedDefaultCategories(userId: string) {
+    const existing = await prisma.category.count({where: {userId}})
+    if(existing > 0) return
+
+    const defaults = [
+        {name: "Food", icon: "Utensils", color: "#f97316"},
+        {name: "Transport", icon: "Car", color: "#3b82f6"},
+        {name: "Shopping", icon: "ShoppingBag", color: "#ec4899"},
+        {name: "Bills", icon: "Receipt", color: "#eab308"},
+        {name: "Entertainment", icon: "Film", color: "#8b5cf6"},
+        {name: "Health", icon: "HeartPulse", color: "#10b981"},
+        {name: "Other", icon: "Tag", color: "#6b7280"}
+    ]
+
+    await prisma.category.createMany({
+        data: defaults.map((c) => ({...c, userId}))
+    })
+}
