@@ -1,22 +1,23 @@
 export type Expense = {
     id: string
     userId: string
-    amount: number
+    amount: number |string
+    categoryId: string
     category: string
     description: string | null
-    date: Date
+    date: Date | string
     createdAt: Date
     updatedAt: Date
 }
 
-export const CATEGORIES = [
-    'Food',
-    'Groceries',
-    'Transport',
-    'Housing',
-    'Utilities',
-    'Entertainment',
-    'Health',
-    'Shopping',
-    'Other'
-] as const
+// export const CATEGORIES = [
+//     'Food',
+//     'Groceries',
+//     'Transport',
+//     'Housing',
+//     'Utilities',
+//     'Entertainment',
+//     'Health',
+//     'Shopping',
+//     'Other'
+// ] as const
