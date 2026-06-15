@@ -2,13 +2,13 @@ import { auth } from "@clerk/nextjs/server";
 import { createCategory, seedDefaultCategories } from "./action";
 import { prisma } from "@/lib/generated/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import  CategoryForm  from "@/components/category-form/CategoryForm";
+import CategoryForm from "@/components/category-form/CategoryForm";
 import CategoryList from "@/components/category-list/CategoryList";
 
 
 export default async function Categoriespage() {
     const {userId} = await auth()
-    if(!userId) throw new Error('Unauthorized')
+    if(!userId) return null
 
     await seedDefaultCategories(userId)
 
@@ -19,7 +19,7 @@ export default async function Categoriespage() {
     })
 
     return (
-        <div className="container mx-auto max-w-3xl py-8 space-y-6">
+        <div className="container mx-auto max-w-2xl py-8 space-y-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Add category</CardTitle>
@@ -36,7 +36,6 @@ export default async function Categoriespage() {
                 </CardHeader>
 
                 <CardContent>
-                    <CategoryForm action={createCategory} />
                     <CategoryList categories={categories} />
                 </CardContent>
             </Card>
@@ -44,3 +43,4 @@ export default async function Categoriespage() {
         </div>
     )
 }
+
