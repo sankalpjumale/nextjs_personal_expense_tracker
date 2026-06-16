@@ -17,7 +17,7 @@ interface CategoryListProps {
 function CategoryList({categories}: CategoryListProps) {
 
     if(categories.length === 0) {
-        return <p className="text-muted-foreground">No categories yet.</p>
+        return <p className="text-muted-foreground text-center py-8">No categories yet.</p>
     }
 
   return (
@@ -45,17 +45,20 @@ function CategoryList({categories}: CategoryListProps) {
               </div>
             </div>
             <div className="flex gap-2">
-              <Link href={`/categories/${category.id}/edit`}>
-                <Button variant="outline" size="sm">
-                  Edit
+                <Button asChild variant="outline" size="sm">
+                  <Link href={`/categories/${category.id}/edit`}>Edit</Link>
                 </Button>
-              </Link>
               <form action={deleteCategory.bind(null, category.id)}>
                 <Button
                   variant="destructive"
                   size="sm"
                   type="submit"
                   disabled={category._count.expenses > 0}
+                  title={
+                    category._count.expenses > 0
+                      ? 'Reassign or delete expenses in this category first'
+                      : undefined
+                  }
                 >
                   Delete
                 </Button>
