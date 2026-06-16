@@ -3,14 +3,16 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CATEGORIES, type Expense } from '@/types/expense'
+import { Category} from '@/types/category'
+import { Expense } from '@/types/expense'
 
 type Props = {
   action: (formData: FormData) => Promise<void>
   defaultValues?: Partial<Expense>
+  categories: Category[]
 }
 
-export function ExpenseForm({ action, defaultValues }: Props) {
+export function ExpenseForm({ action, defaultValues, categories }: Props) {
   const defaultDate = defaultValues?.date
     ? new Date(defaultValues.date).toISOString().split('T')[0]
     : new Date().toISOString().split('T')[0]
@@ -26,25 +28,25 @@ export function ExpenseForm({ action, defaultValues }: Props) {
           step="0.01"
           min="0"
           required
-          defaultValue={defaultValues?.amount}
+          defaultValue={defaultValues?.amount as any}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="category">Category</Label>
+        <Label htmlFor="categoryId">Category</Label>
         <select
-          id="category"
-          name="category"
+          id="categoryId"
+          name="categoryId"
           required
-          defaultValue={defaultValues?.category ?? ''}
+          defaultValue={defaultValues?.categoryId ?? ''}
           className="border rounded-md h-9 px-3 text-sm bg-background"
         >
           <option value="" disabled>
             Select a category
           </option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
             </option>
           ))}
         </select>
@@ -77,3 +79,5 @@ export function ExpenseForm({ action, defaultValues }: Props) {
     </form>
   )
 }
+
+
