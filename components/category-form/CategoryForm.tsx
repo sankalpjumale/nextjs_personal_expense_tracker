@@ -21,19 +21,20 @@ function CategoryForm({action, defaultValues}: CategoryFormProps) {
     const [color, setColor] = useState(defaultValues?.color ?? "#6366f1")
 
   return (
-    <form action={action} className="space-y-4">
-        <div className="space-y-2">
+    <form action={action} className="flex flex=col gap-4 max-w-md">
+        <div className="flex flex-col gap-1.5">
             <Label htmlFor="name">Name</Label>
             <Input 
                 id="name"
                 name="name"
+                type="text"
+                required
                 defaultValue={defaultValues?.name}
                 placeholder="e.g. Groceries"
-                required
             />
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-1.5">
             <Label>Icon</Label>
             <div className="grid grid-cols-5 sm:grid-cols-8 gap-2">
                 {ICON_OPTION.map((iconName) => {
@@ -57,7 +58,7 @@ function CategoryForm({action, defaultValues}: CategoryFormProps) {
             <input type="hidden" name="icon" value={icon} />
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-1.5">
             <Label htmlFor="color">Color</Label>
             <div className="flex items-center gap-3">
                 <input 
@@ -72,7 +73,7 @@ function CategoryForm({action, defaultValues}: CategoryFormProps) {
             <input type="hidden" name="color" value={color} />
         </div>
 
-        <Button type="submit">Save Category</Button>
+        <Button type="submit">{defaultValues ? 'Update Category' : 'Add Category'}</Button>
     </form>
   )
 }
