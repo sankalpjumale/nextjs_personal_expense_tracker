@@ -3,16 +3,29 @@ import { TableCell, TableRow } from '../ui/table'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import type { Expense } from '@/types/expense'
+import * as Icons from 'lucide-react'
 
 function ExpenseItem({expense}: {expense: Expense}) {
 
     const deleteWithId = deleteExpense.bind(null, expense.id)
+    const IconComp = (Icons as any)[expense.category.icon] ?? Icons.Tag
 
   return (
     <TableRow>
         <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
 
-        <TableCell>{expense.category}</TableCell>
+        <TableCell>
+            <span
+                className='inline-flex items-center gap-1.5 rounded-full px.2.5 py-1 text-xs font-medium'
+                style={{
+                    backgroundColor: expense.category.color + '20',
+                    color: expense.category.color
+                }}
+            >
+                <IconComp className="h-3.5 w-3.5"/>
+                {expense.category.name}
+            </span>
+        </TableCell>
 
         <TableCell>{expense.description || '-'}</TableCell>
 

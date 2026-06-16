@@ -1,9 +1,11 @@
+import { Category } from "@prisma/client"
+
 export type Expense = {
     id: string
     userId: string
     amount: number |string
     categoryId: string
-    category: string
+    category: Category
     description: string | null
     date: Date | string
     createdAt: Date
