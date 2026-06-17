@@ -10,20 +10,26 @@ export async function createExpense(formData: FormData) {
     if(!userId) throw new Error('Unauthorized')
 
     const amount = parseFloat(formData.get('amount') as string)
-    const category = formData.get('category') as string
+    const categoryId = formData.get('categoryId') as string
     const description = formData.get('description') as string
     const date = formData.get('date') as string
 
-    if (!amount || !category || !date) {
+    if (!amount || !categoryId || !date) {
         throw new Error('Missing required fields')
     }
+
+    const category = await prisma.category.findUnique({where: {id: categoryId} })
+    if(!category || category.userId !== userId) {
+        throw new Error('Invalid category')
+    }
+
 
     //create a new expense record in the database with the given values
     await prisma.expense.create({
         data:{
             userId,
             amount,
-            category,
+            categoryId,
             description: description || null,
             date: new Date(date)
         }
@@ -39,7 +45,7 @@ export async function updateExpense(id: string, formData: FormData) {
     if(!userId) throw new Error('Unauthorized')
 
     const amount = parseFloat(formData.get('amount') as string)
-    const category = formData.get('category') as string
+    const categoryId = formData.get('categoryId') as string
     const description = formData.get('description') as string
     const date = formData.get('date') as string
 
@@ -47,11 +53,16 @@ export async function updateExpense(id: string, formData: FormData) {
     const expense = await prisma.expense.findUnique({where: { id }})
     if(!expense || expense.userId !== userId) throw new Error('Not found')
 
+    const category = await prisma.category.findUnique({where: {id: categoryId} })
+    if(!category || category.userId !== userId) {
+        throw new Error('Invalid category')
+    }
+
     await prisma.expense.update({
         where: ({id}),
         data: {
             amount,
-            category,
+            categoryId,
             description,
             date: new Date(date)
         }
