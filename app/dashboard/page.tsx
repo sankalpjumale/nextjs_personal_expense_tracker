@@ -4,11 +4,14 @@ import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/generated/prisma"
 import { auth } from "@clerk/nextjs/server"
 import Link from "next/link"
+import { seedDefaultCategories } from "@/app/categories/action"
 
 export default async function DashboardPage() {
 
     const {userId} = await auth()
     if(!userId) return null
+
+    await seedDefaultCategories(userId)
 
     const now = new Date()
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
@@ -16,11 +19,12 @@ export default async function DashboardPage() {
 
     const expenses = await prisma.expense.findMany({
         where: {userId},
+        include: {category: true},
         orderBy: {date: 'desc'}
     })
 
     const monthlyTotal = expenses
-        .filter((e) => e.date >= startOfMonth && e.date <=endOfMonth)
+        .filter((e) => e.date >= startOfMonth && e.date <= endOfMonth)
         .reduce((sum: number, e) => sum + Number(e.amount), 0)
 
     const formattedExpenses = expenses.map((e) => ({
